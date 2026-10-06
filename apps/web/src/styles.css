@@ -1,0 +1,49 @@
+:root {
+  --bg: #fafaf9;
+  --fg: #1c1917;
+  --muted: #78716c;
+  --line: #e7e5e4;
+  --panel: #ffffff;
+  --accent: #1d4ed8;
+  --danger: #b91c1c;
+  color-scheme: light dark;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0c0a09;
+    --fg: #f5f5f4;
+    --muted: #a8a29e;
+    --line: #292524;
+    --panel: #1c1917;
+    --accent: #93c5fd;
+    --danger: #fca5a5;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); line-height: 1.5; }
+.layout { max-width: 1080px; margin: 0 auto; padding: 32px 16px; display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 860px) { .layout { grid-template-columns: 360px minmax(0, 1fr); } header, footer { grid-column: 1 / -1; } }
+h1 { margin: 0; font-size: 28px; }
+h2 { margin: 0 0 16px; font-size: 16px; }
+h3 { margin: 24px 0 8px; font-size: 13px; color: var(--muted); font-weight: 600; }
+.lede { margin: 4px 0 0; color: var(--muted); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 20px; min-width: 0; }
+.field { display: grid; gap: 6px; font-size: 14px; }
+.field input { font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: inherit; }
+.check { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 14px; }
+.error { color: var(--danger); font-size: 13px; margin: 6px 0 0; }
+.pending { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; font-size: 13px; }
+.pending li { display: grid; color: var(--muted); }
+.pending strong { color: var(--fg); font-weight: 500; }
+button { font: inherit; cursor: pointer; }
+.panel > button { margin-top: 24px; width: 100%; padding: 10px; border: 0; border-radius: 6px; background: var(--accent); color: var(--bg); font-weight: 600; }
+.panel > button:disabled { opacity: 0.4; cursor: not-allowed; }
+.preview { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 600px) { .preview { grid-template-columns: 160px minmax(0, 1fr); } }
+.tree { list-style: none; margin: 0; padding: 0; }
+.tree button { width: 100%; text-align: left; border: 0; background: none; color: var(--muted); padding: 4px 8px; border-radius: 4px; font-family: ui-monospace, monospace; font-size: 13px; }
+.tree button[aria-pressed="true"] { background: var(--line); color: var(--fg); }
+pre { margin: 0; padding: 12px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; white-space: pre-wrap; }
+footer { color: var(--muted); font-size: 13px; }
+footer a { color: var(--accent); }

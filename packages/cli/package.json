@@ -1,0 +1,22 @@
+{
+  "name": "@makeaip/cli",
+  "version": "0.0.0",
+  "private": true,
+  "description": "MakeAIP CLI. Thin adapter that writes @makeaip/generator output to disk.",
+  "type": "module",
+  "bin": { "makeaip": "./dist/index.js" },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@makeaip/generator": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.3"
+  }
+}
