@@ -23,5 +23,6 @@ MakeAIP Web        CLI        다른 도구 · AI Coding Agent (예정)
 ## 아직 정하지 않은 것
 
 - 템플릿을 코드로 둘지, 별도 템플릿 파일·원격 카탈로그로 뺄지. 템플릿 수가 늘어날 때 판단한다.
-- 생성 프로젝트가 AIP Core의 도구(`aip` CLI, `@aip/sdk` 등)를 어떤 방식으로 받을지. AIP Core 배포 방식이 정해진 뒤 결정한다.
+- 생성 프로젝트가 AIP Core의 도구(`aip` CLI, `@aip/sdk`)를 받는 공식 경로. 1.0 publish 전이라 지금은 `aip`를 PATH에 둔다고 가정하고 SDK는 tarball로 설치한다. 릴리스 뒤 생성 README의 해당 절을 바꾼다.
+- `scripts/dev-token.mjs`(Core `dev-jwt.mjs` 복사본)를 Core 릴리스 산출물로 대체할 수 있는지.
 - CLI 배포 이름과 npm 공개 여부.

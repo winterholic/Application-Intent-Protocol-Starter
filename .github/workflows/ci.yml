@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # 생성 프로젝트를 검증하는 기준 AIP Core 커밋. Core가 바뀌면 올리고 e2e를 다시 통과시킨다.
+  CORE_REF: 9431a68e4945ebc6faefbd4a84e20ce4b09edad9
+
+jobs:
+  workspace:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '26'
+      - run: npm install --global pnpm@12.6.0
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  generated-project:
+    name: generated project (aip check + service + SDK call)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      CARGO_INCREMENTAL: '0'
+      AIP_E2E_DATABASE_URL: postgres://runner@127.0.0.1:55432/aip_e2e
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: runner
+          POSTGRES_DB: aip_e2e
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - '127.0.0.1:55432:5432'
+        options: >-
+          --health-cmd "pg_isready -U runner -d aip_e2e"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: winterholic/Application-Intent-Protocol
+          ref: ${{ env.CORE_REF }}
+          path: core
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '26'
+      - name: Install tools
+        run: |
+          npm install --global pnpm@12.6.0
+          rustup update stable
+          rustup default stable
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+      - name: Build aip CLI and SDK tarball from Core
+        working-directory: core
+        run: |
+          cargo build --locked -p aip-cli --release
+          npm ci --prefix spikes/spike-0-ts --ignore-scripts --no-audit --no-fund
+          node product/tools/build-sdk.mjs --out "$RUNNER_TEMP/sdk-pkg"
+          npm pack --offline --pack-destination "$RUNNER_TEMP" "$RUNNER_TEMP/sdk-pkg"
+          ls "$RUNNER_TEMP"/aip-sdk-*.tgz
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Starter tests including aip service check on the generated project
+        env:
+          AIP_BIN: ${{ github.workspace }}/core/target/release/aip
+        run: pnpm test
+      - name: Generated project end to end
+        env:
+          AIP_BIN: ${{ github.workspace }}/core/target/release/aip
+          CORE_DIR: ${{ github.workspace }}/core
+        run: |
+          AIP_SDK_TARBALL="$(ls "$RUNNER_TEMP"/aip-sdk-*.tgz)" node scripts/e2e-generated.mjs
