@@ -7,7 +7,7 @@ AIP(Application Intent Protocol) 프로젝트를 시작하는 공식 Project Gen
 
 ## 상태
 
-AIP Core 1.0(기준 커밋 `9431a68e`)의 최소 프로젝트를 만든다. 생성 직후 `aip service check`가 통과하고,
+AIP Core 1.0(기준 커밋 `4e132564`)의 최소 프로젝트를 만든다. 생성 직후 `aip service check`가 통과하고,
 PostgreSQL에서 서비스를 띄운 뒤 TypeScript SDK 호출이 성공하는 것까지 확인한 구조다.
 
 생성물: `app.aip`(정의), `service.json`(설정 템플릿), `package.json`(`@aip/sdk` 의존성과 `check`·`gen`·`setup`·`start`·`demo` 명령),

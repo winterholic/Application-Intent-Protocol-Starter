@@ -15,7 +15,7 @@ concurrency:
 
 env:
   # 생성 프로젝트를 검증하는 기준 AIP Core 커밋. Core가 바뀌면 올리고 e2e를 다시 통과시킨다.
-  CORE_REF: 9431a68e4945ebc6faefbd4a84e20ce4b09edad9
+  CORE_REF: 4e1325644b267f2b3177a327258c0882ee5711c2
 
 jobs:
   workspace:

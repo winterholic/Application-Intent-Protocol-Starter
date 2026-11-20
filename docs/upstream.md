@@ -16,7 +16,7 @@ MakeAIP은 AIP의 consumer다. AIP의 규칙·구조·설정의 정본은 AIP Co
 
 ## 2026-11-21 기준 확인한 상태
 
-Core `origin/main` `9431a68e`에서 직접 실행해 확인했다. Core가 바뀌면 이 표와 `.github/workflows/ci.yml`의 `CORE_REF`를 함께 올린다.
+CI는 출시 후보 `4e132564`에서 생성 프로젝트를 실행한다. Core 기준이 바뀌면 이 표와 `.github/workflows/ci.yml`의 `CORE_REF`를 함께 올린다.
 
 | 항목 | 상태 | 이 저장소의 사용 |
 |---|---|---|
