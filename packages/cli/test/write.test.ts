@@ -1,6 +1,6 @@
 import { mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, relative, sep } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { generate } from "@makeaip/generator";
 import { TargetNotEmpty, writeProject } from "../src/write.js";
@@ -18,7 +18,10 @@ describe("writeProject", () => {
     const { files } = generate({ projectName: "demo" });
     const target = join(base, "demo");
     await writeProject(target, files);
-    expect((await readdir(target)).sort()).toEqual(files.map((f) => f.path).sort());
+    const written = (await readdir(target, { recursive: true, withFileTypes: true }))
+      .filter((entry) => entry.isFile())
+      .map((entry) => relative(target, join(entry.parentPath, entry.name)).split(sep).join("/"));
+    expect(written.sort()).toEqual(files.map((f) => f.path).sort());
     expect(await readFile(join(target, "README.md"), "utf8")).toBe(files.find((f) => f.path === "README.md")?.contents);
   });
 

@@ -35,3 +35,6 @@ pnpm build
 ```
 
 옵션이나 템플릿을 바꾸면 `packages/generator/test`에 기대 결과를 함께 고정한다.
+
+생성 템플릿(정의·설정·명령)을 바꾸면 Core의 `aip`로 직접 확인한다. `AIP_BIN=<aip 경로> pnpm test`가 생성 직후 `aip service check`를,
+`scripts/e2e-generated.mjs`가 서비스 실행과 SDK 호출까지 본다(환경 변수는 README와 파일 머리말). 전용 임시 PostgreSQL만 쓰고 기존 DB에 접속하지 않는다.

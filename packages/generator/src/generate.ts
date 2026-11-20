@@ -1,4 +1,5 @@
-import { agentsMd, GITIGNORE, readme } from "./templates.js";
+import { DEV_JWT_MJS } from "./dev-jwt.js";
+import { agentsMd, appAip, clientMain, GITIGNORE, packageJson, readme, seedSql, serviceJson } from "./templates.js";
 import type { GeneratedFile, GenerationResult, ProjectInput, ProjectSpec } from "./types.js";
 
 export class InvalidProjectInput extends Error {
@@ -30,6 +31,12 @@ export function generate(input: ProjectInput): GenerationResult {
   const files: GeneratedFile[] = [
     { path: "README.md", contents: readme(spec) },
     { path: ".gitignore", contents: GITIGNORE },
+    { path: "app.aip", contents: appAip() },
+    { path: "service.json", contents: serviceJson(spec) },
+    { path: "package.json", contents: packageJson(spec) },
+    { path: "db/seed.sql", contents: seedSql(spec) },
+    { path: "scripts/dev-token.mjs", contents: DEV_JWT_MJS },
+    { path: "client/main.ts", contents: clientMain() },
   ];
   if (spec.agentInstructions) {
     files.push({ path: "AGENTS.md", contents: agentsMd(spec) });
